@@ -68,31 +68,33 @@
         $(function () {
             var actionLink = $("article").find("a"); //выбираем все картинки ссылки
             var button = $("article").find("button");//выбираем все кнопки
-            //actionLink.on("click", function (event) {
-            //    event.preventDefault();
-            //    var buttonId = this.id;
-            //    $.ajax({
-            //        url: "/api/values/" + buttonId,
-            //        type: "PUT",
-            //        success: function (data) {
-            //            ButtonClikc (buttonId, data);
-            //        }
-            //    });
-            //});
+            //
+            actionLink.on("click", function (event) {
+                event.preventDefault();
+                var buttonId = this.id;
+                $.ajax({
+                    url: "/api/values/" + buttonId,
+                    type: "PUT",
+                    success: function (data) {
+                        ButtonClikc(buttonId, data);
+                    }
+                });
+            });
+            //
             button.on("click", function (event) {
                 event.preventDefault();
                 var buttonId = this.value;
                 var textBox = TextBoxData(buttonId);
-                alert("Была нажата кнопка");
+                //alert("Была нажата кнопка");
                 //alert("Кнопка которая была нажата: " + textBox);
                 $.ajax({
                     url: "/api/values/" + buttonId,
                     data: { "": textBox },
                     type: "PUT",
                     success: function (data) {
-                        //ButtonClikc(buttonId, data);
+                        ButtonClikc(buttonId, data);
                         //alert("Кнопка которая была нажата:" + buttonId + " Данные с сервера: " + data);
-                        alert("Пришел ответ " + data);
+                        //alert("Пришел ответ " + data + " кнопка " + buttonId);
                     }
                 });
             });
@@ -123,17 +125,27 @@
                                 var buttonOnOff = $("#onOff");
                                 var nameDevice = $("#nameDevice").html();
                                 var deviceTitle = $("#deviceIcon");
+                                var stateDeviceInMenu = $("menu").find("#device" + nameDevice);//--------------------------
+                                
+                                
+                                
+                                console.dir();
+
                                 if (data === "True") {
                                     buttonOnOff.children().eq(0).removeClass("btn-danger");
                                     buttonOnOff.children().eq(0).addClass("btn-success imageButtonIcon");
                                     buttonOnOff.attr("title", "Выключить устройство");
                                     deviceTitle.attr("title", nameDevice + " вкл.");
+                                    //stateDeviceInMenu.aq(0).removeClass("deviceOff");
+                                    //alert(stateDeviceInMenu.attr("class"));
                                 }
                                 else {
                                     buttonOnOff.children().eq(0).removeClass("btn-success");
                                     buttonOnOff.children().eq(0).addClass("btn-danger imageButtonIcon");
                                     buttonOnOff.attr("title", "Включить устройство");
                                     deviceTitle.attr("title", nameDevice + " выкл.");
+                                    stateDeviceInMenu.aq(0).removeClass("deviceOff");
+                                    alert(stateDeviceInMenu.attr("class"));
                                 }
                                 //alert("Device state: " + data + " " + buttonOnOff.html());
                                 break;
@@ -141,24 +153,28 @@
                         case "volumeDown":
                         case "volumeUp":
                         case "volumeMute":
+                        case "volume":
                             {
                                 $("#TextBoxVolume").val(data);
                                 break;
                             }
                         case "chanelPrevios":
                         case "chanelNext":
+                        case "current":
                             {
                                 $("#TextBoxSwich").val(data);
                                 break;
                             }
                         case "tempDown":
                         case "tempUp":
+                        case "temperature":
                             {
                                 $("#TextBoxTemp").val(data);
                                 break;
                             }
                         case "bassDown":
                         case "bassUp":
+                        case "bass":
                             {
                                 $("#TextBoxBass").val(data);
                                 break;

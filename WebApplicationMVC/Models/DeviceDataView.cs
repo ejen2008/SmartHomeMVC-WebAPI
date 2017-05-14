@@ -18,6 +18,7 @@ namespace WebApplicationMVC.Models
         public List<IDevicable> DeviceList { get; set; }
         public IDevicable DeviceActive { get; set; }
         public string Message { get; set; }
+
         //public DeviceIconLink ObjectIconLink { private get; set; }
         public string LinkIconDevice(IDevicable device)
         {

@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Web;
+using System.Xml.Serialization;
 using WebApplicationMVC.Models;
 
 namespace WebApplicationMVC.Models
@@ -34,7 +35,9 @@ namespace WebApplicationMVC.Models
                     data = (DeviceDataView)binFormatter.Deserialize(devicesData);
                 }
                 else { }
+
             return data;
         }
+
     }
 }

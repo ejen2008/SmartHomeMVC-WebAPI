@@ -185,16 +185,17 @@ namespace WebApplicationMVC.Controllers
         {
             deviceDataView = ReadData();
             //deviceDataView = DeviceData();
-            List<IDevicable> devicesList = deviceDataView.DeviceList;
-            devicesList.Remove(deviceDataView.DeviceActive);
-            if (devicesList.Count > 0)
+            
+            deviceDataView.DeviceList.Remove(deviceDataView.DeviceActive);
+            if (deviceDataView.DeviceList.Count > 0)
             {
-                deviceDataView.DeviceActive = devicesList[0];
+                deviceDataView.DeviceActive = deviceDataView.DeviceList[0];
             }
             else
             {
                 deviceDataView.DeviceActive = null;
             }
+            deviceDataView.DeviceList = devicesList;
             WriteData();
             return RedirectToAction("Index");
         }

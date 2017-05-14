@@ -12,10 +12,10 @@ namespace WebApplicationMVC.Models
         public void Write(DeviceDataView data, string nameFile)
         {
             BinaryFormatter binFormatter = new BinaryFormatter();
-            using (FileStream deviceData = new FileStream(nameFile, FileMode.OpenOrCreate))
+            using (FileStream deviceData = new FileStream(nameFile, FileMode.Create))
             {
                 binFormatter.Serialize(deviceData, data);
             }
         }
     }
-}
+}   

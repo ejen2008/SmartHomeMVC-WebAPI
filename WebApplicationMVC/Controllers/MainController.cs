@@ -1,25 +1,32 @@
 ﻿using SmartHome;
 using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using WebApplicationMVC.Models;
 
+
 namespace WebApplicationMVC.Controllers
 {
     public class MainController : Controller
     {
-        DeviceDataView deviceDataView = new DeviceDataView(new Views.ViewData.DeviceIconLink());
+        //DeviceDataView deviceDataView = new DeviceDataView(new Views.ViewData.DeviceIconLink());
+        DeviceDataView deviceDataView;
         Factory factory;
         List<IDevicable> devicesList;
+        
         //
         // GET: /Main/
         [HttpGet]
         public ActionResult Index()
         {
-            if (deviceDataView.DeviceList == null)
+            string linkFile = LinkFileData();
+            bool fileExist = System.IO.File.Exists(linkFile);
+            if (fileExist == false)
             {
+                deviceDataView = new DeviceDataView(new Views.ViewData.DeviceIconLink());
                 factory = new Factory();
                 devicesList = new List<IDevicable>();
                 devicesList.Add(factory.CreatorTV("Samsung"));
@@ -35,14 +42,19 @@ namespace WebApplicationMVC.Controllers
                 EventStateDevice();
                 WriteData();
             }
+            else if (TempData["deviceData"] != null)
+            {
+                deviceDataView = (DeviceDataView)TempData["deviceData"];
+                WriteData();
+            }
             else
             {
-                //deviceDataView = ReadData();
-                //deviceDataView = DeviceData();
+                deviceDataView = ReadData();
             }
 
             return View(deviceDataView);
         }
+        
         [HttpPost]
         public ActionResult Index(string volume, string current, string temperature, string bass, string buttonSubmit)
         {
@@ -89,6 +101,7 @@ namespace WebApplicationMVC.Controllers
             {
                 deviceDataView.Message = deviceDataView.DeviceActive.Name + " выкл.";
             }
+            TempData["deviceData"] = deviceDataView;
             return RedirectToAction("Index");
         }
 
@@ -160,6 +173,7 @@ namespace WebApplicationMVC.Controllers
                 deviceDataView.DeviceActive = devicesList.Last<IDevicable>();
                 EventStateDevice();
                 //WriteData();
+                TempData["deviceData"] = deviceDataView;
                 return RedirectToAction("Index");
             }
             else
@@ -177,7 +191,8 @@ namespace WebApplicationMVC.Controllers
             IDevicable activDevice = deviceList.Find(device => device.Name == parameter);
             deviceDataView.DeviceActive = activDevice;
             deviceDataView.Message = null;
-            WriteData();
+            //WriteData();
+            TempData["deviceData"] = deviceDataView;
             return RedirectToAction("Index");
         }
 
@@ -195,8 +210,9 @@ namespace WebApplicationMVC.Controllers
             {
                 deviceDataView.DeviceActive = null;
             }
-            deviceDataView.DeviceList = devicesList;
-            WriteData();
+            //deviceDataView.DeviceList = devicesList;
+            //WriteData();
+            TempData["deviceData"] = deviceDataView;
             return RedirectToAction("Index");
         }
         public ActionResult OnOffDevice()

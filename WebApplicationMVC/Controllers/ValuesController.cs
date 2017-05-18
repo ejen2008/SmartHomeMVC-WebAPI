@@ -19,17 +19,11 @@ namespace WebApplicationMVC.Controllers
             List<IDevicable> deviceList = deviceDataView.DeviceList;
             IDevicable device = deviceList.Find(dev => dev == deviceDataView.DeviceActive);
             string result;
-
-
+            
             if (device.State == true)
             {
                 switch (id)
                 {
-                    case "delete":
-                        {
-                            result = "удалено";
-                            break;
-                        }
                     case "onOff":
                         {
                             device.Off();
